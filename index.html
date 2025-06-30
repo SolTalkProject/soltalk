@@ -4,11 +4,63 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SolTalk</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    button {
+      background-color: #7c3aed;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #wallet-address {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #ccc;
+    }
+  </style>
 </head>
-<body style="background:#0d0d0d;color:#fff;font-family:sans-serif">
-  <div id="app">
-    <h1>SolTalk</h1>
-    <p>Connexion Phantom à venir ici...</p>
-  </div>
+<body>
+  <h1>SolTalk</h1>
+  <button id="connect-button">Connect Wallet</button>
+  <div id="wallet-address"></div>
+
+  <script>
+    const connectButton = document.getElementById('connect-button');
+    const addressDisplay = document.getElementById('wallet-address');
+
+    async function connectWallet() {
+      if ('solana' in window) {
+        const provider = window.solana;
+
+        if (provider.isPhantom) {
+          try {
+            const resp = await provider.connect();
+            const address = resp.publicKey.toString();
+            addressDisplay.innerText = 'Connected: ' + address;
+          } catch (err) {
+            console.error('Connection failed', err);
+          }
+        } else {
+          alert('Phantom Wallet not found. Please install it.');
+        }
+      } else {
+        alert('Solana wallet not found. Please install Phantom.');
+      }
+    }
+
+    connectButton.addEventListener('click', connectWallet);
+  </script>
 </body>
 </html>
