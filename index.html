@@ -35,6 +35,13 @@
   <h1>SolTalk</h1>
   <button id="connect-button">Connect Wallet</button>
   <div id="wallet-address"></div>
+  <div id="messaging-form" style="display:none; margin-top: 40px;">
+    <input id="recipient-address" type="text" placeholder="Adresse Solana du destinataire" style="padding:10px; width:300px; margin-bottom:10px;" /><br>
+    <input id="recipient-alias" type="text" placeholder="Alias (facultatif)" style="padding:10px; width:300px; margin-bottom:10px;" /><br>
+    <textarea id="message-content" placeholder="Écris ton message ici..." style="padding:10px; width:300px; height:100px;"></textarea><br>
+    <button onclick="sendMessage()">Envoyer</button>
+  </div>
+  
 
   <script>
     const connectButton = document.getElementById('connect-button');
@@ -61,6 +68,29 @@
     }
 
     connectButton.addEventListener('click', connectWallet);
+    function sendMessage() {
+  const to = document.getElementById('recipient-address').value;
+  const alias = document.getElementById('recipient-alias').value;
+  const content = document.getElementById('message-content').value;
+  const from = window.solana.publicKey.toString();
+
+  if (!to || !content) {
+    alert("Adresse et message requis.");
+    return;
+  }
+
+  const message = {
+    from,
+    to,
+    alias,
+    content,
+    date: new Date().toISOString()
+  };
+
+  console.log("📩 Message prêt à envoyer :", message);
+  alert("Message envoyé ! (bientôt stocké dans Supabase 🔐)");
+}
+
   </script>
 </body>
 </html>
