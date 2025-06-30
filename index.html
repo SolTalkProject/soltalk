@@ -29,19 +29,30 @@
       font-size: 14px;
       color: #ccc;
     }
+    #messaging-form {
+      margin-top: 40px;
+    }
+    input, textarea {
+      padding: 10px;
+      width: 300px;
+      margin-bottom: 10px;
+    }
+    textarea {
+      height: 100px;
+    }
   </style>
 </head>
 <body>
   <h1>SolTalk</h1>
   <button id="connect-button">Connect Wallet</button>
   <div id="wallet-address"></div>
-  <div id="messaging-form" style="display:none; margin-top: 40px;">
-    <input id="recipient-address" type="text" placeholder="Adresse Solana du destinataire" style="padding:10px; width:300px; margin-bottom:10px;" /><br>
-    <input id="recipient-alias" type="text" placeholder="Alias (facultatif)" style="padding:10px; width:300px; margin-bottom:10px;" /><br>
-    <textarea id="message-content" placeholder="Écris ton message ici..." style="padding:10px; width:300px; height:100px;"></textarea><br>
+
+  <div id="messaging-form" style="display:none;">
+    <input id="recipient-address" type="text" placeholder="Adresse Solana du destinataire" /><br>
+    <input id="recipient-alias" type="text" placeholder="Alias (facultatif)" /><br>
+    <textarea id="message-content" placeholder="Écris ton message ici..."></textarea><br>
     <button onclick="sendMessage()">Envoyer</button>
   </div>
-  
 
   <script>
     const connectButton = document.getElementById('connect-button');
@@ -56,6 +67,10 @@
             const resp = await provider.connect();
             const address = resp.publicKey.toString();
             addressDisplay.innerText = 'Connected: ' + address;
+
+            // Affiche le formulaire une fois connecté
+            document.getElementById('messaging-form').style.display = 'block';
+
           } catch (err) {
             console.error('Connection failed', err);
           }
@@ -68,29 +83,29 @@
     }
 
     connectButton.addEventListener('click', connectWallet);
+
     function sendMessage() {
-  const to = document.getElementById('recipient-address').value;
-  const alias = document.getElementById('recipient-alias').value;
-  const content = document.getElementById('message-content').value;
-  const from = window.solana.publicKey.toString();
+      const to = document.getElementById('recipient-address').value;
+      const alias = document.getElementById('recipient-alias').value;
+      const content = document.getElementById('message-content').value;
+      const from = window.solana.publicKey.toString();
 
-  if (!to || !content) {
-    alert("Adresse et message requis.");
-    return;
-  }
+      if (!to || !content) {
+        alert("Adresse et message requis.");
+        return;
+      }
 
-  const message = {
-    from,
-    to,
-    alias,
-    content,
-    date: new Date().toISOString()
-  };
+      const message = {
+        from,
+        to,
+        alias,
+        content,
+        date: new Date().toISOString()
+      };
 
-  console.log("📩 Message prêt à envoyer :", message);
-  alert("Message envoyé ! (bientôt stocké dans Supabase 🔐)");
-}
-
+      console.log("📩 Message prêt à envoyer :", message);
+      alert("Message envoyé ! (stockage à venir)");
+    }
   </script>
 </body>
 </html>
